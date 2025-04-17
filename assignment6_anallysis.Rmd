@@ -9,13 +9,87 @@ output: html_document
 knitr::opts_chunk$set(echo = TRUE)
 ```
 
-## Including Plots
+## Reading in time data
+```{r}
+data <- read_csv('hci_results.csv')
+```
+## Calculating and plotting the mean values between the two groups
+```{r}
+means <- data %>% summarise(combined_mean = mean(combined), not_combined = mean(`not combined`))
 
-You can also embed plots, for example:
-
-```{r pressure, echo=FALSE}
-set_wd("/Users/sydneysimon/Documents/Penn/HCI/Assignment 6")
+means
 ```
 
+```{r}
+df_long <- data %>%
+  pivot_longer(cols = c(combined, `not combined`),
+               names_to = "type",
+               values_to = "value")
 
+df_long %>% 
+  ggplot() +
+  geom_boxplot( aes(x = type, y = value)) +
+  labs(
+    title = "Distribution Task Times",
+    x = "UI Variants",
+    y = "Time (in seconds)"
+  ) +
+  theme_bw()
+
+```
+
+## Pivotting table to create one column that specifies type and another for the time value
+
+```{r}
+ggplot(df_long) %>%
+  geom_point(aes(x = ))
+```
+
+## Regular T-Test
+
+```{r}
+t.test(value ~ type,data = df_long)
+```
+
+## Paired T-test
+
+```{r}
+ordinal_data$combined <- as.numeric(ordinal_data$combined)
+ordinal_data$not_combined <- as.numeric(ordinal_data$not_combined)
+t.test(ordinal_data$combined, ordinal_data$not_combined, paired = TRUE)
+```
+
+## reading in data that contains the ordinal input
+
+```{r}
+ordinal_data <- read_csv('hci_results_ordinal.csv')
+ordinal_data
+```
+
+## Plotting distribution of ordinal values
+```{r}
+
+ordinal_data$categorical <- factor(
+  ordinal_data$categorical,
+  levels = c("Strongly Disagree", "Disagree", "Neutral", "Agree", "Strongly agree")
+)
+
+ggplot(ordinal_data) +
+  geom_bar(aes(x = categorical)) +
+  scale_x_discrete(drop = FALSE) +
+  labs(
+    title = "Distribution of User Preference to Combined Button",
+    x = "Response",
+    y = "Count"
+  ) +
+  theme_bw()
+```
+
+## Chi Squared Test
+
+```{r}
+response_table <- table(ordinal_data$categorical)
+
+chisq.test(response_table)
+```
 
