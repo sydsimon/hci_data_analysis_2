@@ -1,0 +1,21 @@
+---
+title: "Assignment 6"
+author: '61268340'
+date: "2025-04-17"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+## Including Plots
+
+You can also embed plots, for example:
+
+```{r pressure, echo=FALSE}
+set_wd("/Users/sydneysimon/Documents/Penn/HCI/Assignment 6")
+```
+
+
+
